@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Speed & Velocity Game V6.1</title>
+<style>
+body{font-family:Tahoma,sans-serif;background:#eef3f8;text-align:center;margin:10px}
+.card{background:#fff;max-width:1100px;margin:auto;padding:15px;border-radius:12px}
+canvas{border:2px solid #333;background:#fff;max-width:100%}
+input,button{padding:6px;margin:4px}
+#timer{font-size:28px;font-weight:bold;color:#0066cc}
+#stars{font-size:30px;color:gold}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>🚗 เกมอัตราเร็วและความเร็ว V6.1</h2>
+ชื่อ <input id="studentName">
+ชั้น <input id="studentClass">
+เลขที่ <input id="studentNo">
+<button onclick="startGame()">เริ่มเกม</button>
+<div id="stars">☆☆☆☆☆</div>
+<h3 id="timer">เวลา 0.0 s</h3>
+<div id="info"></div>
+<canvas id="cv" width="800" height="500"></canvas><br>
+อัตราเร็ว <input id="speedAns"> m/s
+ความเร็ว <input id="velocityAns"> m/s
+<br>
+<button onclick="checkAnswer()">ตรวจคำตอบ</button>
+<button onclick="replay()">เล่นซ้ำ</button>
+<div id="result"></div>
+</div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbycBUGQbO3myjrjyVD8twu5VszvdDQExsYKj150uAnTcwMzhpwea-wC-2cSVRhqklgL/exec";
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+let score=0,q=0,maxQ=5,pathPts=[],distance=0,disp=0,timeUsed=0,ansSpeed=0,ansVelocity=0;
+
+function stars(){document.getElementById("stars").innerHTML="⭐".repeat(score)+"☆".repeat(5-score);}
+function grid(){
+ctx.clearRect(0,0,cv.width,cv.height);
+for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.strokeStyle="#ddd";ctx.stroke();}
+for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.strokeStyle="#ddd";ctx.stroke();}
+}
+
+async function animate(){
+grid();
+let s=pathPts[0], e=pathPts[pathPts.length-1];
+ctx.fillText("A",s[0]+10,s[1]); ctx.fillText("B",e[0]+10,e[1]);
+ctx.beginPath(); ctx.moveTo(s[0],s[1]);
+for(let i=1;i<pathPts.length;i++) ctx.lineTo(pathPts[i][0],pathPts[i][1]);
+ctx.strokeStyle="red"; ctx.lineWidth=3; ctx.stroke();
+
+let frame=0,totalFrames=200;
+for(let i=0;i<=totalFrames;i++){
+grid();
+ctx.beginPath(); ctx.moveTo(s[0],s[1]);
+for(let j=1;j<pathPts.length;j++) ctx.lineTo(pathPts[j][0],pathPts[j][1]);
+ctx.strokeStyle="red"; ctx.stroke();
+let t=i/totalFrames;
+let x=s[0]+(e[0]-s[0])*t, y=s[1]+(e[1]-s[1])*t;
+ctx.beginPath(); ctx.arc(x,y,10,0,Math.PI*2); ctx.fillStyle="blue"; ctx.fill();
+document.getElementById("timer").innerText="เวลา "+(timeUsed*t).toFixed(1)+" s";
+await new Promise(r=>setTimeout(r,20));
+frame=i;
+}
+document.getElementById("info").innerHTML=
+`ระยะทาง = ${distance.toFixed(1)} m | การกระจัด = ${disp.toFixed(1)} m | เวลา = ${timeUsed.toFixed(1)} s`;
+}
+
+function newQuestion(){
+let sx=120,sy=250;
+let ex=120+40*(2+Math.floor(Math.random()*8));
+let ey=250+(Math.floor(Math.random()*5)-2)*40;
+pathPts=[[sx,sy],[ex,sy],[ex,ey]];
+distance=(Math.abs(ex-sx)+Math.abs(ey-sy))/40;
+disp=Math.sqrt(((ex-sx)/40)**2+((ey-sy)/40)**2);
+timeUsed=(distance*0.8+Math.random()*4+2);
+ansSpeed=distance/timeUsed;
+ansVelocity=disp/timeUsed;
+document.getElementById("speedAns").value="";
+document.getElementById("velocityAns").value="";
+animate();
+}
+
+function startGame(){
+if(!studentName.value.trim()) return alert("กรอกชื่อ");
+score=0;q=0;stars();newQuestion();
+}
+
+function replay(){animate();}
+
+function checkAnswer(){
+let s=parseFloat(speedAns.value),v=parseFloat(velocityAns.value);
+if(Math.abs(s-ansSpeed)<0.15 && Math.abs(v-ansVelocity)<0.15){
+score++; stars();
+result.innerHTML="✅ ถูกต้อง";
+q++;
+if(q>=maxQ){finish();} else setTimeout(newQuestion,1000);
+}else result.innerHTML="❌ ลองใหม่";
+}
+
+async function saveScore(){
+let p=new URLSearchParams();
+p.append("name",studentName.value);
+p.append("classroom",studentClass.value);
+p.append("number",studentNo.value);
+p.append("score",score);
+p.append("time",timeUsed.toFixed(1));
+p.append("distance",distance.toFixed(1));
+p.append("displacement",disp.toFixed(1));
+p.append("speed",ansSpeed.toFixed(2));
+p.append("velocity",ansVelocity.toFixed(2));
+try{await fetch(SCRIPT_URL,{method:"POST",body:p});}catch(e){}
+}
+
+function finish(){
+saveScore();
+result.innerHTML="<h2>🏆 จบเกม</h2><h3>คะแนน "+score+"/5</h3><button onclick='window.print()'>พิมพ์ผล</button>";
+}
+stars();
+</script>
+</body>
+</html>
