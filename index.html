@@ -15,19 +15,25 @@ input,button{padding:6px;margin:4px}
 </head>
 <body>
 <div class="card">
-<h2>🚗 เกมอัตราเร็วและความเร็ว V6.1</h2>
+<h2>🚗 เกมอัตราเร็วและความเร็ว V6.2</h2>
 ชื่อ <input id="studentName">
 ชั้น <input id="studentClass">
 เลขที่ <input id="studentNo">
 <button onclick="startGame()">เริ่มเกม</button>
 <div id="stars">☆☆☆☆☆</div>
+
 <h3 id="timer">เวลา 0.0 s</h3>
+
 <div id="info"></div>
+
+<div id="skipInfo">ข้ามแล้ว 0/3 ครั้ง</div>
+
 <canvas id="cv" width="800" height="500"></canvas><br>
 อัตราเร็ว <input id="speedAns"> m/s
 ความเร็ว <input id="velocityAns"> m/s
 <br>
 <button onclick="checkAnswer()">ตรวจคำตอบ</button>
+<button onclick="skipQuestion()">ข้ามข้อ</button>
 <button onclick="replay()">เล่นซ้ำ</button>
 <div id="result"></div>
 </div>
@@ -35,15 +41,45 @@ input,button{padding:6px;margin:4px}
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbycBUGQbO3myjrjyVD8twu5VszvdDQExsYKj150uAnTcwMzhpwea-wC-2cSVRhqklgL/exec";
 const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
-let score=0,q=0,maxQ=5,pathPts=[],distance=0,disp=0,timeUsed=0,ansSpeed=0,ansVelocity=0;
+  
+let score=0;
+let q=0;
+
+let skipCount=0;
+let wrongCount=0;
+
+const maxQ=5;
+const maxSkip=3;
+
+let scoreSent=false;
+
+let pathPts=[];
+let distance=0;
+let disp=0;
+let timeUsed=0;
+
+let ansSpeed=0;
+let ansVelocity=0;
 
 function stars(){document.getElementById("stars").innerHTML="⭐".repeat(score)+"☆".repeat(5-score);}
-function grid(){
+
+  function updateSkip(){
+
+ document.getElementById("skipInfo").innerHTML=
+ "ข้ามแล้ว "+skipCount+"/3 ครั้ง";
+
+}
+  function grid(){
 ctx.clearRect(0,0,cv.width,cv.height);
 for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.strokeStyle="#ddd";ctx.stroke();}
 for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.strokeStyle="#ddd";ctx.stroke();}
 }
+function updateSkip(){
 
+  document.getElementById("skipInfo").innerHTML=
+  "ข้ามแล้ว "+skipCount+"/3 ครั้ง";
+
+}
 async function animate(){
 grid();
 let s=pathPts[0], e=pathPts[pathPts.length-1];
@@ -104,7 +140,32 @@ function startGame(){
 
   newQuestion();
 }
+function skipQuestion(){
 
+ if(skipCount>=maxSkip){
+
+   alert("ข้ามได้ไม่เกิน 3 ครั้ง");
+   return;
+
+ }
+
+ skipCount++;
+
+ updateSkip();
+
+ q++;
+
+ if(q>=maxQ){
+
+   finish();
+
+ }else{
+
+   newQuestion();
+
+ }
+
+}
 async function saveScore(){
 let p=new URLSearchParams();
 p.append("name",studentName.value);
