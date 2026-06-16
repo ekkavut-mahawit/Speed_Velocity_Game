@@ -85,20 +85,24 @@ animate();
 }
 
 function startGame(){
-if(!studentName.value.trim()) return alert("กรอกชื่อ");
-score=0;q=0;stars();newQuestion();
-}
 
-function replay(){animate();}
+  if(document.getElementById("studentName").value.trim()==""){
+    alert("กรุณากรอกชื่อ");
+    return;
+  }
 
-function checkAnswer(){
-let s=parseFloat(speedAns.value),v=parseFloat(velocityAns.value);
-if(Math.abs(s-ansSpeed)<0.15 && Math.abs(v-ansVelocity)<0.15){
-score++; stars();
-result.innerHTML="✅ ถูกต้อง";
-q++;
-if(q>=maxQ){finish();} else setTimeout(newQuestion,1000);
-}else result.innerHTML="❌ ลองใหม่";
+  score=0;
+  q=0;
+  skipCount=0;
+  wrongCount=0;
+  scoreSent=false;
+
+  stars();
+  updateSkip();
+
+  document.getElementById("result").innerHTML="";
+
+  newQuestion();
 }
 
 async function saveScore(){
