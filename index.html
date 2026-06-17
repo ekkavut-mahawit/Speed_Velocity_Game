@@ -63,10 +63,13 @@ const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
 
 const carImg = new Image();
 carImg.src = "car.png";
+  document.getElementById("level").addEventListener("change", function(){
+  currentLevel = this.value;
+});
   
 let score=0;
 let q=0;
-
+let currentLevel = "easy";
 let skipCount=0;
 let wrongCount=0;
 
@@ -227,8 +230,7 @@ function newQuestion(){
 
   wrongCount=0;
 
-  let level =
-  document.getElementById("level").value;
+ let level = currentLevel;
 
   let sx = 120;
   let sy = 240;
@@ -359,7 +361,7 @@ function newQuestion(){
 }
 function startGame(){
 
-  if(document.getElementById("studentName").value.trim()==""){
+  if(studentName.value.trim()==""){
     alert("กรุณากรอกชื่อ");
     return;
   }
@@ -369,6 +371,8 @@ function startGame(){
   skipCount=0;
   wrongCount=0;
   scoreSent=false;
+
+  currentLevel = document.getElementById("level").value; // ⭐ เก็บค่าเริ่มต้น
 
   stars();
   updateSkip();
