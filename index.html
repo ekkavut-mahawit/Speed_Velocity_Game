@@ -32,6 +32,12 @@ input,button{padding:6px;margin:4px}
 ชื่อ <input id="studentName">
 ชั้น <input id="studentClass">
 เลขที่ <input id="studentNo">
+  ระดับ
+
+<select id="level">
+  <option value="easy">ง่าย (A-B-C)</option>
+  <option value="hard">ยาก (A-B-C-D)</option>
+</select>
 <button onclick="startGame()">เริ่มเกม</button>
 <div id="stars">☆☆☆☆☆</div>
 
@@ -203,21 +209,21 @@ function newQuestion(){
 
   wrongCount=0;
 
-  do{
+  let level =
+  document.getElementById("level").value;
 
-    // เว้นขอบซ้าย ขวา บน ล่าง
-    let sx = 120 + Math.floor(Math.random()*4)*40;
+  let sx = 120;
+  let sy = 240;
 
-    let sy = 160 + Math.floor(Math.random()*4)*40;
+  if(level=="easy"){
 
-    let ab = 5 + Math.floor(Math.random()*4); // 5-8
+    // A-B-C
 
-    let bc = 5 + Math.floor(Math.random()*3); // 5-7
+    let ab = 5 + Math.floor(Math.random()*6); // 5-10
+    let bc = 5 + Math.floor(Math.random()*4); // 5-8
 
     let ex = sx + ab*40;
 
-    // ถ้าลงแล้วตกขอบ ให้ขึ้น
-    // ถ้าขึ้นแล้วตกขอบ ให้ลง
     let dir;
 
     if(sy - bc*40 < 40){
@@ -225,7 +231,7 @@ function newQuestion(){
       dir = 1;
 
     }
-    else if(sy + bc*40 > 460){
+    else if(sy + bc*40 > 440){
 
       dir = -1;
 
@@ -239,43 +245,100 @@ function newQuestion(){
     let ey = sy + dir*bc*40;
 
     pathPts = [
-      [sx,sy],   // A
-      [ex,sy],   // B
-      [ex,ey]    // C
+      [sx,sy],     // A
+      [ex,sy],     // B
+      [ex,ey]      // C
     ];
 
-    distance =
-      (Math.abs(ex-sx)+Math.abs(ey-sy))/40;
+  }
+  else{
 
-    disp =
-      Math.sqrt(
-        ((ex-sx)/40)**2 +
-        ((ey-sy)/40)**2
-      );
+    // A-B-C-D
 
-  }while(disp < 5);
+    let ab = 5 + Math.floor(Math.random()*4); // 5-8
+    let bc = 5 + Math.floor(Math.random()*4); // 5-8
+    let cd = 5 + Math.floor(Math.random()*4); // 5-8
+
+    let bx = sx + ab*40;
+
+    let dir;
+
+    if(sy - bc*40 < 40){
+
+      dir = 1;
+
+    }
+    else if(sy + bc*40 > 440){
+
+      dir = -1;
+
+    }
+    else{
+
+      dir = Math.random()<0.5 ? -1 : 1;
+
+    }
+
+    let cy = sy + dir*bc*40;
+
+    let dx = bx + cd*40;
+
+    if(dx > 720){
+
+      dx = 720;
+
+    }
+
+    pathPts = [
+      [sx,sy],     // A
+      [bx,sy],     // B
+      [bx,cy],     // C
+      [dx,cy]      // D
+    ];
+
+  }
+
+  // ระยะทาง
+
+  distance = 0;
+
+  for(let i=0;i<pathPts.length-1;i++){
+
+    distance +=
+      Math.abs(pathPts[i+1][0]-pathPts[i][0])/40 +
+      Math.abs(pathPts[i+1][1]-pathPts[i][1])/40;
+
+  }
+
+  // การกระจัด
+
+  let start = pathPts[0];
+  let end   = pathPts[pathPts.length-1];
+
+  disp = Math.sqrt(
+    ((end[0]-start[0])/40)**2 +
+    ((end[1]-start[1])/40)**2
+  );
 
   timeUsed =
-    distance*0.8 +
-    Math.random()*4 +
-    2;
+  distance*0.8 + Math.random()*4 + 2;
 
   ansSpeed =
-    parseFloat(
-      (distance/timeUsed).toFixed(2)
-    );
+  parseFloat(
+    (distance/timeUsed).toFixed(2)
+  );
 
   ansVelocity =
-    parseFloat(
-      (disp/timeUsed).toFixed(2)
-    );
+  parseFloat(
+    (disp/timeUsed).toFixed(2)
+  );
 
   document.getElementById("speedAns").value="";
   document.getElementById("velocityAns").value="";
 
   animate();
-}
 
+}
 function startGame(){
 
   if(document.getElementById("studentName").value.trim()==""){
