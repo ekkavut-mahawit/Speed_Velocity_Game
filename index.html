@@ -74,7 +74,6 @@ let skipCount=0;
 let wrongCount=0;
 
 const maxQ=5;
-const maxSkip=10;
 
 let scoreSent=false;
 
@@ -97,7 +96,6 @@ for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.he
 for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.strokeStyle="#ddd";ctx.stroke();}
 }
   
-const maxSkip = 10;
 
 function updateSkip(){
   document.getElementById("skipInfo").innerHTML =
