@@ -63,17 +63,13 @@ let ansVelocity=0;
 
 function stars(){document.getElementById("stars").innerHTML="⭐".repeat(score)+"☆".repeat(5-score);}
 
-  function updateSkip(){
-
- document.getElementById("skipInfo").innerHTML=
- "ข้ามแล้ว "+skipCount+"/3 ครั้ง";
-
 }
   function grid(){
 ctx.clearRect(0,0,cv.width,cv.height);
 for(let x=0;x<cv.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.strokeStyle="#ddd";ctx.stroke();}
 for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.strokeStyle="#ddd";ctx.stroke();}
 }
+  
 function updateSkip(){
 
   document.getElementById("skipInfo").innerHTML=
@@ -106,6 +102,9 @@ document.getElementById("info").innerHTML=
 }
 
 function newQuestion(){
+  wrongCount=0;
+
+  let sx=120,sy=250;
 let sx=120,sy=250;
 let ex=120+40*(2+Math.floor(Math.random()*8));
 let ey=250+(Math.floor(Math.random()*5)-2)*40;
@@ -166,23 +165,145 @@ function skipQuestion(){
  }
 
 }
+  function checkAnswer(){
+
+  let s=parseFloat(document.getElementById("speedAns").value);
+  let v=parseFloat(document.getElementById("velocityAns").value);
+
+  if(
+    Math.abs(s-ansSpeed)<0.15 &&
+    Math.abs(v-ansVelocity)<0.15
+  ){
+
+    score++;
+
+    stars();
+
+    document.getElementById("result").innerHTML=
+    "✅ ถูกต้อง";
+
+    q++;
+
+    if(q>=maxQ){
+
+      finish();
+
+    }else{
+
+      setTimeout(newQuestion,1000);
+
+    }
+
+  }else{
+
+    wrongCount++;
+
+    if(wrongCount>=2){
+
+      document.getElementById("result").innerHTML=
+      "❌ เฉลย<br>"+
+      "อัตราเร็ว = "+
+      ansSpeed.toFixed(2)+
+      " m/s<br>"+
+      "ความเร็ว = "+
+      ansVelocity.toFixed(2)+
+      " m/s";
+
+      q++;
+
+      if(q>=maxQ){
+
+        setTimeout(finish,2000);
+
+      }else{
+
+        setTimeout(newQuestion,2500);
+
+      }
+
+    }else{
+
+      document.getElementById("result").innerHTML=
+      "❌ ลองใหม่อีกครั้ง";
+
+    }
+
+  }
+
+}
 async function saveScore(){
-let p=new URLSearchParams();
-p.append("name",studentName.value);
-p.append("classroom",studentClass.value);
-p.append("number",studentNo.value);
-p.append("score",score);
-p.append("time",timeUsed.toFixed(1));
-p.append("distance",distance.toFixed(1));
-p.append("displacement",disp.toFixed(1));
-p.append("speed",ansSpeed.toFixed(2));
-p.append("velocity",ansVelocity.toFixed(2));
-try{await fetch(SCRIPT_URL,{method:"POST",body:p});}catch(e){}
+
+  if(scoreSent) return;
+
+  scoreSent=true;
+
+  let p=new URLSearchParams();
+
+  p.append("name",studentName.value);
+  p.append("classroom",studentClass.value);
+  p.append("number",studentNo.value);
+
+  p.append("score",score);
+  p.append("skip",skipCount);
+
+  p.append("distance",distance.toFixed(1));
+  p.append("displacement",disp.toFixed(1));
+
+  p.append("time",timeUsed.toFixed(1));
+
+  p.append("speed",ansSpeed.toFixed(2));
+  p.append("velocity",ansVelocity.toFixed(2));
+
+  try{
+
+    await fetch(
+      SCRIPT_URL,
+      {
+        method:"POST",
+        body:p
+      }
+    );
+
+  }catch(e){
+
+    console.log(e);
+
+  }
+
 }
 
 function finish(){
-saveScore();
-result.innerHTML="<h2>🏆 จบเกม</h2><h3>คะแนน "+score+"/5</h3><button onclick='window.print()'>พิมพ์ผล</button>";
+
+  saveScore();
+
+  let pass=
+  score>=3
+  ?"ผ่านเกณฑ์"
+  :"ควรทบทวนเพิ่มเติม";
+
+  document.getElementById("result").innerHTML=
+  `
+  <h2>🏆 สรุปผลการเรียน</h2>
+
+  <p>
+  <b>${studentName.value}</b>
+  ชั้น ${studentClass.value}
+  เลขที่ ${studentNo.value}
+  </p>
+
+  <p>คะแนน ${score}/5</p>
+
+  <p>ข้าม ${skipCount} ครั้ง</p>
+
+  <p style="color:green">
+  ${pass}
+  </p>
+
+  <button onclick="window.print()">
+  🖨️ พิมพ์ผลการเรียน
+  </button>
+  `;
+
 }
 stars();
 </script>
