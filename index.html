@@ -60,7 +60,7 @@ input,button{padding:6px;margin:4px}
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbycBUGQbO3myjrjyVD8twu5VszvdDQExsYKj150uAnTcwMzhpwea-wC-2cSVRhqklgL/exec";
 const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
-
+const maxSkip=10;
 const carImg = new Image();
 carImg.src = "car.png";
   document.getElementById("level").addEventListener("change", function(){
@@ -75,7 +75,10 @@ let wrongCount=0;
 
 const maxQ=5;
 const maxSkip=10;
-
+function updateSkip(){
+  document.getElementById("skipInfo").innerHTML=
+  "ข้ามแล้ว "+skipCount+"/"+maxSkip+" ครั้ง";
+}
 let scoreSent=false;
 
 let pathPts=[];
@@ -384,7 +387,7 @@ function startGame(){
 function skipQuestion(){
 
  if(skipCount>=maxSkip){
-   alert("ข้ามได้ไม่เกิน 10 ครั้ง");
+   alert("ข้ามได้ไม่เกิน " + maxSkip + " ครั้ง");
    return;
  }
 
