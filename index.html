@@ -104,7 +104,19 @@ async function animate(){
       ctx.strokeStyle="red";
       ctx.lineWidth=3;
       ctx.stroke();
+ctx.fillStyle="black";
 
+ctx.fillText(
+  "A",
+  pathPts[0][0]+10,
+  pathPts[0][1]-10
+);
+
+ctx.fillText(
+  "B",
+  pathPts[pathPts.length-1][0]+10,
+  pathPts[pathPts.length-1][1]-10
+);
       let t=i/segmentFrames;
 
       let x=p1[0]+(p2[0]-p1[0])*t;
