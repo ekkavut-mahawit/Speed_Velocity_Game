@@ -380,28 +380,20 @@ function startGame(){
 function skipQuestion(){
 
  if(skipCount>=maxSkip){
-
    alert("ข้ามได้ไม่เกิน 3 ครั้ง");
    return;
-
  }
 
  skipCount++;
-
  updateSkip();
 
- q++;
+ // ❌ เอา q++ ออก (สำคัญ)
 
  if(q>=maxQ){
-
    finish();
-
  }else{
-
    newQuestion();
-
  }
-
 }
   function checkAnswer(){
 
