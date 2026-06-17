@@ -75,10 +75,7 @@ let wrongCount=0;
 
 const maxQ=5;
 const maxSkip=10;
-function updateSkip(){
-  document.getElementById("skipInfo").innerHTML=
-  "ข้ามแล้ว "+skipCount+"/"+maxSkip+" ครั้ง";
-}
+
 let scoreSent=false;
 
 let pathPts=[];
@@ -101,10 +98,8 @@ for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.wid
 }
   
 function updateSkip(){
-
   document.getElementById("skipInfo").innerHTML=
-  "ข้ามแล้ว "+skipCount+"/3 ครั้ง";
-
+  "ข้ามแล้ว "+skipCount+"/"+maxSkip+" ครั้ง";
 }
 async function animate(){
 
