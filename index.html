@@ -104,6 +104,22 @@ async function animate(){
       ctx.strokeStyle="red";
       ctx.lineWidth=3;
       ctx.stroke();
+      ctx.beginPath();
+ctx.moveTo(
+  pathPts[0][0],
+  pathPts[0][1]
+);
+
+ctx.lineTo(
+  pathPts[pathPts.length-1][0],
+  pathPts[pathPts.length-1][1]
+);
+
+ctx.strokeStyle="blue";
+ctx.lineWidth=2;
+ctx.setLineDash([8,8]);
+ctx.stroke();
+ctx.setLineDash([]);
 ctx.fillStyle="black";
 
 ctx.fillText(
