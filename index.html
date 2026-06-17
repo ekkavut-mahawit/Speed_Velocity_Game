@@ -45,7 +45,10 @@ input,button{padding:6px;margin:4px}
 
 <div id="info"></div>
 
-<div id="skipInfo">ข้ามแล้ว 0/10 ครั้ง</div>
+function updateSkip(){
+  document.getElementById("skipInfo").innerHTML=
+  "ข้ามแล้ว "+skipCount+"/"+maxSkip+" ครั้ง";
+}
 
 <canvas id="cv" width="800" height="500"></canvas><br>
 อัตราเร็ว <input id="speedAns"> m/s
