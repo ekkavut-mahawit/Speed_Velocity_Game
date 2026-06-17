@@ -45,7 +45,7 @@ input,button{padding:6px;margin:4px}
 
 <div id="info"></div>
 
-<div id="skipInfo">ข้ามแล้ว 0/10 ครั้ง</div>
+<div id="skipInfo">ข้ามแล้ว 0/3 ครั้ง</div>
 
 <canvas id="cv" width="800" height="500"></canvas><br>
 อัตราเร็ว <input id="speedAns"> m/s
@@ -98,9 +98,9 @@ for(let y=0;y<cv.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.wid
 }
   
 function updateSkip(){
+
   document.getElementById("skipInfo").innerHTML=
-  "ข้ามแล้ว "+skipCount+"/"+maxSkip+" ครั้ง";
-}
+  "ข้ามแล้ว "+skipCount+"/3 ครั้ง";
 
 }
 async function animate(){
