@@ -182,8 +182,16 @@ function newQuestion(){
     let sx=120;
     let sy=240;
 
-    let ex=120+40*(2+Math.floor(Math.random()*8));
-    let ey=240+(Math.floor(Math.random()*5)-2)*40;
+    let ab = 5 + Math.floor(Math.random()*6); // 5-10 หน่วย
+
+let bc = 5 + Math.floor(Math.random()*4); // 5-8 หน่วย
+
+let ex = sx + ab*40;
+
+// สุ่มขึ้นหรือลง
+let dir = Math.random()<0.5 ? -1 : 1;
+
+let ey = sy + dir*bc*40;
 
     pathPts=[[sx,sy],[ex,sy],[ex,ey]];
 
