@@ -111,8 +111,8 @@ ctx.moveTo(
 );
 
 ctx.lineTo(
-  pathPts[pathPts.length-1][0],
-  pathPts[pathPts.length-1][1]
+  pathPts[2][0],
+  pathPts[2][1]
 );
 
 ctx.strokeStyle="blue";
@@ -120,6 +120,8 @@ ctx.lineWidth=2;
 ctx.setLineDash([8,8]);
 ctx.stroke();
 ctx.setLineDash([]);
+ctx.fillStyle="black";
+
 ctx.fillStyle="black";
 
 ctx.fillText(
@@ -130,8 +132,14 @@ ctx.fillText(
 
 ctx.fillText(
   "B",
-  pathPts[pathPts.length-1][0]+10,
-  pathPts[pathPts.length-1][1]-10
+  pathPts[1][0]+10,
+  pathPts[1][1]-10
+);
+
+ctx.fillText(
+  "C",
+  pathPts[2][0]+10,
+  pathPts[2][1]-10
 );
       let t=i/segmentFrames;
 
