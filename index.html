@@ -79,28 +79,57 @@ function updateSkip(){
 
 }
 async function animate(){
-grid();
-let s=pathPts[0], e=pathPts[pathPts.length-1];
-ctx.fillText("A",s[0]+10,s[1]); ctx.fillText("B",e[0]+10,e[1]);
-ctx.beginPath(); ctx.moveTo(s[0],s[1]);
-for(let i=1;i<pathPts.length;i++) ctx.lineTo(pathPts[i][0],pathPts[i][1]);
-ctx.strokeStyle="red"; ctx.lineWidth=3; ctx.stroke();
 
-let frame=0,totalFrames=200;
-for(let i=0;i<=totalFrames;i++){
-grid();
-ctx.beginPath(); ctx.moveTo(s[0],s[1]);
-for(let j=1;j<pathPts.length;j++) ctx.lineTo(pathPts[j][0],pathPts[j][1]);
-ctx.strokeStyle="red"; ctx.stroke();
-let t=i/totalFrames;
-let x=s[0]+(e[0]-s[0])*t, y=s[1]+(e[1]-s[1])*t;
-ctx.beginPath(); ctx.arc(x,y,10,0,Math.PI*2); ctx.fillStyle="blue"; ctx.fill();
-document.getElementById("timer").innerText="เวลา "+(timeUsed*t).toFixed(1)+" s";
-await new Promise(r=>setTimeout(r,20));
-frame=i;
-}
-document.getElementById("info").innerHTML=
-`ระยะทาง = ${distance.toFixed(1)} m | การกระจัด = ${disp.toFixed(1)} m | เวลา = ${timeUsed.toFixed(1)} s`;
+  grid();
+
+  let totalSegments = pathPts.length - 1;
+  let segmentFrames = 100;
+
+  for(let seg=0; seg<totalSegments; seg++){
+
+    let p1 = pathPts[seg];
+    let p2 = pathPts[seg+1];
+
+    for(let i=0;i<=segmentFrames;i++){
+
+      grid();
+
+      ctx.beginPath();
+      ctx.moveTo(pathPts[0][0],pathPts[0][1]);
+
+      for(let k=1;k<pathPts.length;k++){
+        ctx.lineTo(pathPts[k][0],pathPts[k][1]);
+      }
+
+      ctx.strokeStyle="red";
+      ctx.lineWidth=3;
+      ctx.stroke();
+
+      let t=i/segmentFrames;
+
+      let x=p1[0]+(p2[0]-p1[0])*t;
+      let y=p1[1]+(p2[1]-p1[1])*t;
+
+      ctx.beginPath();
+      ctx.arc(x,y,10,0,Math.PI*2);
+      ctx.fillStyle="blue";
+      ctx.fill();
+
+      let progress=
+      (seg+t)/totalSegments;
+
+      document.getElementById("timer").innerText=
+      "เวลา "+(timeUsed*progress).toFixed(1)+" s";
+
+      await new Promise(r=>setTimeout(r,15));
+
+    }
+
+  }
+
+  document.getElementById("info").innerHTML=
+  `เวลาในการเคลื่อนที่ = ${timeUsed.toFixed(1)} วินาที`;
+
 }
 
 function newQuestion(){
