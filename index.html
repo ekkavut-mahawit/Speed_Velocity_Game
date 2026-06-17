@@ -163,10 +163,21 @@ const labels = ["A","B","C","D"];
 
 for(let i=0;i<pathPts.length;i++){
 
+  let tx = pathPts[i][0] + 10;
+  let ty = pathPts[i][1] - 10;
+
+  if(tx > cv.width - 20){
+    tx = pathPts[i][0] - 20;
+  }
+
+  if(ty < 20){
+    ty = pathPts[i][1] + 20;
+  }
+
   ctx.fillText(
     labels[i],
-    pathPts[i][0]+10,
-    pathPts[i][1]-10
+    tx,
+    ty
   );
 
 }
@@ -290,11 +301,11 @@ function newQuestion(){
 
     let dx = bx + cd*40;
 
-    if(dx > 720){
+   if(dx > 680){
 
-      dx = 720;
+  dx = 680;
 
-    }
+}
 
     pathPts = [
       [sx,sy],     // A
