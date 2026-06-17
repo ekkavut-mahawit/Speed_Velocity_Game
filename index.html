@@ -159,23 +159,17 @@ ctx.fillStyle="black";
 
 ctx.fillStyle="black";
 
-ctx.fillText(
-  "A",
-  pathPts[0][0]+10,
-  pathPts[0][1]-10
-);
+const labels = ["A","B","C","D"];
 
-ctx.fillText(
-  "B",
-  pathPts[1][0]+10,
-  pathPts[1][1]-10
-);
+for(let i=0;i<pathPts.length;i++){
 
-ctx.fillText(
-  "C",
-  pathPts[2][0]+10,
-  pathPts[2][1]-10
-);
+  ctx.fillText(
+    labels[i],
+    pathPts[i][0]+10,
+    pathPts[i][1]-10
+  );
+
+}
       let t=i/segmentFrames;
 
       let x=p1[0]+(p2[0]-p1[0])*t;
