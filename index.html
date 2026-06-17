@@ -299,17 +299,13 @@ function newQuestion(){
 
     let cy = sy + dir*bc*40;
 
-    let ab = 5 + Math.floor(Math.random()*4); // 5-8
+    let dx = bx + cd*40;
 
-let maxCd =
-Math.floor((680 - (sx + ab*40))/40);
+   if(dx > 680){
 
-if(maxCd < 5) maxCd = 5;
+  dx = 680;
 
-let cd =
-5 + Math.floor(
-  Math.random()*(maxCd-4)
-);
+}
 
     pathPts = [
       [sx,sy],     // A
