@@ -74,7 +74,7 @@ let skipCount=0;
 let wrongCount=0;
 
 const maxQ=5;
-const maxSkip=3;
+const maxSkip=10;
 
 let scoreSent=false;
 
@@ -384,7 +384,7 @@ function startGame(){
 function skipQuestion(){
 
  if(skipCount>=maxSkip){
-   alert("ข้ามได้ไม่เกิน 3 ครั้ง");
+   alert("ข้ามได้ไม่เกิน 10 ครั้ง");
    return;
  }
 
