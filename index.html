@@ -146,10 +146,15 @@ ctx.fillText(
       let x=p1[0]+(p2[0]-p1[0])*t;
       let y=p1[1]+(p2[1]-p1[1])*t;
 
-      ctx.beginPath();
-      ctx.arc(x,y,10,0,Math.PI*2);
-      ctx.fillStyle="blue";
-      ctx.fill();
+      ctx.font="28px Arial";
+ctx.textAlign="center";
+ctx.textBaseline="middle";
+
+ctx.fillText(
+  "🚗",
+  x,
+  y
+);
 
       let progress=
       (seg+t)/totalSegments;
