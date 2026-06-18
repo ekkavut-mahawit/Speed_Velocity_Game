@@ -407,24 +407,30 @@ function skipQuestion(){
     Math.abs(v-ansVelocity)<0.15
   ){
 
-    score++;
+   score++;
 
-    stars();
+stars();
 
-    document.getElementById("result").innerHTML=
-    "✅ ถูกต้อง";
+document.getElementById("result").innerHTML =
+"✅ ถูกต้อง";
 
-    q++;
+// ⭐ ได้ 2 ดาวแล้ว จบเกมทันที
+if(score >= 2){
+    finish();
+    return;
+}
 
-    if(q>=maxQ){
+q++;
 
-      finish();
+if(q>=maxQ){
 
-    }else{
+    finish();
 
-      setTimeout(newQuestion,1000);
+}else{
 
-    }
+    setTimeout(newQuestion,1000);
+
+}
 
   }else{
 
