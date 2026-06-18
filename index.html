@@ -73,7 +73,7 @@ let currentLevel = "easy";
 let skipCount=0;
 let wrongCount=0;
 
-const maxQ=5;
+const maxQ=2;
 
 let scoreSent=false;
 
@@ -86,8 +86,8 @@ let ansSpeed=0;
 let ansVelocity=0;
 
 function stars(){
-  document.getElementById("stars").innerHTML=
-  "⭐".repeat(score)+"☆".repeat(5-score);
+  document.getElementById("stars").innerHTML =
+  "⭐".repeat(score)+"☆".repeat(2-score);
 }
 
 function grid(){
@@ -514,7 +514,7 @@ function finish(){
   saveScore();
 
   let pass=
-  score>=3
+  score>=2
   ?"ผ่านเกณฑ์"
   :"ควรทบทวนเพิ่มเติม";
 
@@ -528,7 +528,7 @@ function finish(){
   เลขที่ ${studentNo.value}
   </p>
 
-  <p>คะแนน ${score}/5</p>
+  <p>คะแนน ${score}/2</p>
 
   <p>ข้าม ${skipCount} ครั้ง</p>
 
